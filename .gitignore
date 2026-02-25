@@ -1,0 +1,12 @@
+# Go build/test
+*.test
+*.out
+/bin/
+/vendor/
+
+# IDE/editor
+.idea/
+.vscode/
+
+# OS
+.DS_Store
