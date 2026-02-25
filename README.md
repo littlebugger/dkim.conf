@@ -6,6 +6,7 @@ Go parser for Rspamd DKIM configuration files (`dkim.conf` and `dkim_signing.con
 - Parses DKIM module config (`dkim.conf`).
 - Parses DKIM signing config (`dkim_signing.conf`) including per-domain rules.
 - Parses the `sign_headers` list into structured entries.
+- Parses `maps.d` map files (selectors, paths, signed domains).
 
 ## Install
 
@@ -63,6 +64,31 @@ func main() {
     }
 
     _ = conf
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+
+    "github.com/littlebugger/dkim.conf/rspamd/dkim"
+)
+
+func main() {
+    f, err := os.Open("maps.d/dkim_selectors.map")
+    if err != nil {
+        panic(err)
+    }
+    defer f.Close()
+
+    selectors, err := dkim.ParseDKIMSelectorsMap(f)
+    if err != nil {
+        panic(err)
+    }
+
+    _ = selectors
 }
 ```
 
