@@ -1,0 +1,10 @@
+# DKIM selector map
+# Managed by Ansible
+# Format: domain selector
+# This map is auto-generated from DKIM keys in /var/lib/rspamd/dkim
+
+# Domains with specific keys use selector "mail"
+# All other domains use default selector "s1" (from global config)
+
+test.mailer.com mail
+mailer.test.com s1

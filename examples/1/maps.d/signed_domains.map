@@ -1,0 +1,6 @@
+@go.test.com	/var/lib/rspamd/dkim/c1.dkim.domain.com.key
+@pro.test.club /var/lib/rspamd/dkim/c1.dkim.domain.com.key
+@email.test.club /var/lib/rspamd/dkim/c1.dkim.domain.com.key
+@team.test.club /var/lib/rspamd/dkim/c1.dkim.domain.com.key
+@tr.test.club /var/lib/rspamd/dkim/c1.dkim.domain.com.key
+@e.test.club /var/lib/rspamd/dkim/c1.dkim.domain.com.key
