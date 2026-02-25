@@ -132,6 +132,21 @@ func ParseDKIMSigningConf(r io.Reader) (*DKIMSigningConf, error) {
 	return conf, nil
 }
 
+// ParseDKIMSelectorsMap parses a maps.d/dkim_selectors.map file.
+func ParseDKIMSelectorsMap(r io.Reader) (map[string]string, error) {
+	return parseKeyValueMap(r)
+}
+
+// ParseDKIMPathsMap parses a maps.d/dkim_paths.map file.
+func ParseDKIMPathsMap(r io.Reader) (map[string]string, error) {
+	return parseKeyValueMap(r)
+}
+
+// ParseSignedDomainsMap parses a maps.d/signed_domains.map file.
+func ParseSignedDomainsMap(r io.Reader) (map[string]string, error) {
+	return parseKeyValueMap(r)
+}
+
 type tokenType int
 
 const (
@@ -216,6 +231,26 @@ func (l *lexer) next() (token, error) {
 
 func (l *lexer) unread(tok token) {
 	l.peek = &tok
+}
+
+func parseKeyValueMap(r io.Reader) (map[string]string, error) {
+	scanner := bufio.NewScanner(r)
+	out := make(map[string]string)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			return nil, fmt.Errorf("invalid map line: %q", line)
+		}
+		out[fields[0]] = fields[1]
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (l *lexer) readIdent() error {

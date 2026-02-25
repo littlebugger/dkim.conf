@@ -91,3 +91,37 @@ func TestParseDKIMSigningConf(t *testing.T) {
 	require.Equal(t, "/etc/rspamd/local.d/maps.d/signed_domains.map", conf2.PathMap)
 	require.Equal(t, "/etc/rspamd/local.d/maps.d/dkim_selectors.map", conf2.SelectorMap)
 }
+
+func TestParseDKIMSelectorsMap(t *testing.T) {
+	f, err := os.Open("../../examples/3/maps.d/dkim_selectors.map")
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = f.Close() })
+
+	m, err := ParseDKIMSelectorsMap(f)
+	require.NoError(t, err)
+	require.NotEmpty(t, m)
+	require.Equal(t, "mail", m["test.mailer.com"])
+	require.Equal(t, "s1", m["mailer.test.com"])
+}
+
+func TestParseDKIMPathsMap(t *testing.T) {
+	f, err := os.Open("../../examples/1/maps.d/dkim_paths.map")
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = f.Close() })
+
+	m, err := ParseDKIMPathsMap(f)
+	require.NoError(t, err)
+	require.NotEmpty(t, m)
+	require.Equal(t, "/var/lib/rspamd/dkim/s1.sender-01.com.key", m["s1.sender-01.com"])
+}
+
+func TestParseSignedDomainsMap(t *testing.T) {
+	f, err := os.Open("../../examples/1/maps.d/signed_domains.map")
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = f.Close() })
+
+	m, err := ParseSignedDomainsMap(f)
+	require.NoError(t, err)
+	require.NotEmpty(t, m)
+	require.Equal(t, "/var/lib/rspamd/dkim/c1.dkim.domain.com.key", m["@go.test.com"])
+}
